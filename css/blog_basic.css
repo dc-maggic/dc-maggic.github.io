@@ -520,3 +520,27 @@ dl dt {
     #fb_comments .c_content, #fb_comments .comment_body {
       margin-left: 57px;   }
 }
+/*添加d*/
+ul.links li {
+  width: 20em;
+  display: inline-block;
+  margin-bottom: 2.3em
+}
+
+ul.links li img {
+  height: 3em;
+  margin: 0 1.5em 0 0;
+  float: left;
+  border: 3px solid #eee;
+  padding: 0
+}
+
+ul.links li a {
+  display: block;
+  font-weight: 700
+}
+
+ul.links {
+  padding-left: 4.5em;
+  padding-top: 3em
+}

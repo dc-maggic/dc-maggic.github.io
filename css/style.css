@@ -688,7 +688,12 @@ a.btn {
   .footer {
     display: none;
   }
-
+/*添加d*/
+  ul.links li {
+    display: block!important;
+    list-style: none;
+    width: 100%!important
+  }
   .share {
     display: grid;
   }
