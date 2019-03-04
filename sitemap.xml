@@ -2,6 +2,20 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://dc-maggic.github.io/books/index.html</loc>
+    
+    <lastmod>2019-03-04T11:35:06.393Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://dc-maggic.github.io/albums/index.html</loc>
+    
+    <lastmod>2019-03-04T10:52:59.044Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://dc-maggic.github.io/about/index.html</loc>
     
     <lastmod>2019-02-20T09:14:03.513Z</lastmod>
