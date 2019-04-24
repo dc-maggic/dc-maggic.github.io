@@ -147,7 +147,8 @@ a:hover, a:active {
   border-bottom: 1px solid #5A5A5A;
 }
 .page-top .information {
-  float: right;
+  position: absolute;
+    right: 0;
   padding-top: 12px;
   padding-right: 20px;
 }
