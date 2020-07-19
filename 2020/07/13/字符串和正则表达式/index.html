@@ -1,0 +1,94 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><meta name="author" content="黄侦探"><title>字符串和正则表达式 · 侦探事务所</title><meta name="description" content="字符串连接
+The + operator
+1str = &quot;a&quot; + &quot;b&quot; + &quot;c&quot;;
+
+The += operator
+123str = &quot;a&quot;;str += &quot;b&quot;;str += &quot;c&quot;;
+ str += “one” + “two”; 会经历4个步骤：
+
+在内存中创建一个临时字符串；。
+连接后"><meta name="keywords"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="renderer" content="webkit"><link rel="short icon" href="/images/favicon.png" type="image/x-icon"><link rel="stylesheet" href="/css/style.css"><link rel="stylesheet" href="/css/blog_basic.css"><link rel="stylesheet" href="/css/font-awesome.min.css"><link rel="alternate" type="application/atom+xml" title="ATOM 1.0" href="/atom.xml"><script src="/js/baidutongji.js"></script></head><body><div class="sidebar animated fadeInDown"><div class="logo-title"><div class="title"><img src="/images/logo@2x.png" style="width:127px;"><h3 title=""><a href="/">侦探事务所</a></h3><div class="description"><p>学海无涯 寻真相</p></div></div></div><ul class="social-links"><li><a href="http://github.com/dc-maggic"><i class="fa fa-github"></i></a></li></ul><div class="footer"><div class="by_farbox"><span>Nice to meet you!</span></div></div></div><div class="main"><div class="page-top animated fadeInDown"><div class="nav"><li><a href="/">首页</a></li><li><a href="/about">关于</a></li><li><a href="/archives">归档</a></li><li><a href="/links">友链</a></li><li><a href="/albums">相册</a></li><li><a href="/books">书籍</a></li></div><div class="information"><div class="back_btn"><li><a class="fa fa-chevron-left" onclick="window.history.go(-1)"> </a></li></div><div class="avatar"><img src="/images/littlegirl.jpg"></div></div></div><div class="autopagerize_page_element"><div class="content"><div class="post-page"><div class="post animated fadeInDown"><div class="post-title"><h3><a>字符串和正则表达式</a></h3></div><div class="post-content"><h3 id="字符串连接"><a href="#字符串连接" class="headerlink" title="字符串连接"></a>字符串连接</h3><ol>
+<li><p>The + operator</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">str = <span class="string">"a"</span> + <span class="string">"b"</span> + <span class="string">"c"</span>;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>The += operator</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">str = <span class="string">"a"</span>;</span><br><span class="line">str += <span class="string">"b"</span>;</span><br><span class="line">str += <span class="string">"c"</span>;</span><br></pre></td></tr></table></figure>
+<p> str += “one” + “two”;<br> 会经历4个步骤：</p>
+<ul>
+<li>在内存中创建一个临时字符串；。</li>
+<li>连接后的字符串”onetwo”被赋予给该临时字符串。</li>
+<li>临时字符串与 str 当前的值连接。</li>
+<li><p>结果赋值给 str。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//这样做直接附加内容给 str，从而避免产生临时字符串。在大多数浏览器中会提速10%-40%</span></span><br><span class="line">str += <span class="string">"one"</span>;</span><br><span class="line">str += <span class="string">"two"</span>;</span><br></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//简化为一个语句</span></span><br><span class="line">str = str + <span class="string">"one"</span> + <span class="string">"two"</span>;</span><br></pre></td></tr></table></figure>
+<p>但是改变连接顺序（eg: str = “one” + str + “two”;)，本优化将失效。</p>
+<blockquote>
+<blockquote>
+<p>这些技术不适合 IE。在 IE7 及早期版本中结果只会更慢。是由 IE 执行连接操作的底层机制决定的。</p>
+</blockquote>
+</blockquote>
+</li>
+</ul>
+</li>
+<li><p>array.join()</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">str = [<span class="string">"a"</span>, <span class="string">"b"</span>, <span class="string">"c"</span>].join(<span class="string">""</span>);</span><br></pre></td></tr></table></figure>
+<ul>
+<li>/<blockquote>
+<blockquote>
+<p>在大多浏览器中，数项合并比其它字符串连接方法更慢。但事实上，它却在 IE7 及更早版本浏览器中合并大量字符串唯一高效的途径。</p>
+</blockquote>
+</blockquote>
+</li>
+</ul>
+</li>
+<li><p>string.concat()</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">str = <span class="string">"a"</span>;</span><br><span class="line">str = str.concat(<span class="string">"b"</span>,<span class="string">"c"</span>);</span><br></pre></td></tr></table></figure>
+<ul>
+<li>/<blockquote>
+<p>在多数情况下，使用 concat 比使用简单的 + 和 += 稍慢，尤其在 IE、Opera 和 Chrome 中慢得更明显。</p>
+</blockquote>
+</li>
+</ul>
+</li>
+</ol>
+<h3 id="正则表达式优化"><a href="#正则表达式优化" class="headerlink" title="正则表达式优化"></a>正则表达式优化</h3><h4 id="正则表达式工作原理"><a href="#正则表达式工作原理" class="headerlink" title="正则表达式工作原理"></a>正则表达式工作原理</h4><ol>
+<li>编译</li>
+<li>设置起始位置</li>
+<li>匹配每个正则表达式字元</li>
+<li>匹配成功或失败</li>
+</ol>
+<h4 id="回溯"><a href="#回溯" class="headerlink" title="回溯"></a>回溯</h4><p>回溯是匹配过程的基础组成部分。<br>量词，如* +? {2,}<br>分支，如 | 操作符<br>贪婪量词：<em><br>惰性量词：</em>? （即匹配尽量少的字符）</p>
+<h4 id="回溯失控"><a href="#回溯失控" class="headerlink" title="回溯失控"></a>回溯失控</h4><p>当正则表达式导致浏览器假死数秒、数分钟，甚至更长时间，问题很可能是因为回溯失控。<br>（天呐，我看了书好几遍，还是没搞懂回溯怎么进行的！！）<br>目标字符串：&lt;p&gt;Para1.&lt;/p&gt;<br>贪婪量词：/&lt;p&gt;.*&lt;/p&gt;/i 第16步找到匹配项<br>惰性量词：/&lt;p&gt;.*?&lt;/p&gt;/i 第22步找到匹配项<br>解决方案：</p>
+<ol>
+<li>具体化<br> 尽可能具体化分隔符直接的字符串匹配模式。如模式“.<em>?”，它用来匹配一个由双引号包围的字符串。可以把 .\</em>? 替换为更具体的 [^”\r\n]*，就去除了回溯时可能发生的几种情况。</li>
+<li>使用预查和反向引用的模拟原子组<br> 支持“原子组”特性的正则表达式引擎，包括.NET、Java、Oniguruma、PCRE 和 Perl。一旦原子组中存在一个正则表达式，该组的任何回溯位置都会被丢弃。<br> 写法：(?&gt;…)<br> But! JavaScript 不支持原子组。但是可以利用预查过程中的行为来模拟原子组：预查也是原子组。</li>
+</ol>
+<h4 id="提高正则表达式效率的方法"><a href="#提高正则表达式效率的方法" class="headerlink" title="提高正则表达式效率的方法"></a>提高正则表达式效率的方法</h4><ol>
+<li>关注如何让匹配更快失败</li>
+<li>正则表达式以简单、必需的字元开始</li>
+<li>使用量词模式，使它们后面的字元互斥</li>
+<li>使用非捕获组</li>
+<li>值捕获感兴趣的文本以减少后处理</li>
+<li>暴露必需的字元</li>
+<li>使用合适的量词</li>
+<li>把正则表达式赋值给变量并重用它们</li>
+<li>将复杂的正则表达式拆分为简单的片段</li>
+</ol>
+<h4 id="何时不使用正则表达式"><a href="#何时不使用正则表达式" class="headerlink" title="何时不使用正则表达式"></a>何时不使用正则表达式</h4><p>只是搜索字面字符串时会弄巧成拙。<br>如：检查一个字符串是否以分号结尾，可能用如下表达式<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">endsWithSemicolon = <span class="regexp">/;%/</span>.test(str);</span><br></pre></td></tr></table></figure></p>
+<p>但是浏览器并不是小机灵，它只会逐个测试整个字符串。最好的解决方法是<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">endsWithSemicolon = str.charAt(str.length - <span class="number">1</span>) == <span class="string">";"</span>;</span><br></pre></td></tr></table></figure></p>
+<h4 id="去除字符串首尾空白"><a href="#去除字符串首尾空白" class="headerlink" title="去除字符串首尾空白"></a>去除字符串首尾空白</h4><ol>
+<li>使用正则表达式去首尾空白<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>(!<span class="built_in">String</span>.prototype.trim)&#123;</span><br><span class="line">    <span class="built_in">String</span>.prototype.trim = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>.replace(<span class="regexp">/^\s+/</span>,<span class="string">""</span>).replace(<span class="regexp">/\s+$/</span>,<span class="string">""</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>其中有5种方法，这个是更好的解决方案</p>
+<ol start="2">
+<li>不实用正则表达式去除字符串首尾空白<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">String</span>.prototype.trim = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="keyword">var</span> start = <span class="number">0</span>,</span><br><span class="line">        end = <span class="keyword">this</span>.length - <span class="number">1</span>,</span><br><span class="line">        ws = <span class="string">" \n\r\t\f\x0b\xa0\u1680......\ufeff"</span>;</span><br><span class="line">    <span class="keyword">while</span> (ws.indexOf(<span class="keyword">this</span>.charAt(start)) &gt; <span class="number">-1</span>)&#123;</span><br><span class="line">        start++;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">while</span> (end &gt; start &amp;&amp; ws.indexOf(<span class="keyword">this</span>.charAt(end)) &gt; <span class="number">-1</span>)&#123;</span><br><span class="line">        end--;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">this</span>.slice(start, end + <span class="number">1</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>弱点：不宜用来处理前后大段的空白字符。</p>
+<ol start="3">
+<li>混合解决方案<br>用正则表达式方法过滤头部空白，用非正则表达式的方法过滤尾字符。<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">String</span>.prototype.trim = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="keyword">var</span> str = <span class="keyword">this</span>.replace(<span class="regexp">/^\s+/</span>,<span class="string">""</span>),</span><br><span class="line">        end = str.length - <span class="number">1</span>,</span><br><span class="line">        ws = <span class="regexp">/\s/</span>;</span><br><span class="line">    <span class="keyword">while</span> (ws.test(str.charAt(end)))&#123;</span><br><span class="line">        end--;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> str.slice(<span class="number">0</span>, end + <span class="number">1</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>所有 trim 方法的总的趋势是：在基于正则表达式的方案中，字符串的总长度比修剪掉的字符数量更影响性能；而非正则表达式方案从字符串末尾反向查找，不受字符串总长度的影响，但明显收到修剪空格的数量的影响。<br>简单地使用2次子正则表达式在各种浏览器处理不同内容及长度的字符串是，提供了更一致的性能表现，所以它被证明是最周全的解决方案。</p>
+</div><div class="post-footer"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2020-07-13</span><i class="fa fa-tag"></i><a class="tag" href="/tags/JavaScript/" title="JavaScript">JavaScript </a></div></div></div></div><div class="share"><div class="evernote"><a class="fa fa-bookmark" href="javascript:(function(){EN_CLIP_HOST='http://www.evernote.com';try{var%20x=document.createElement('SCRIPT');x.type='text/javascript';x.src=EN_CLIP_HOST+'/public/bookmarkClipper.js?'+(new%20Date().getTime()/100000);document.getElementsByTagName('head')[0].appendChild(x);}catch(e){location.href=EN_CLIP_HOST+'/clip.action?url='+encodeURIComponent(location.href)+'&amp;title='+encodeURIComponent(document.title);}})();" ref="nofollow" target="_blank"></a></div><div class="weibo"><a class="fa fa-weibo" href="javascript:void((function(s,d,e){try{}catch(e){}var f='http://service.weibo.com/share/share.php?',u=d.location.href,p=['url=',e(u),'&amp;title=',e(d.title),'&amp;appkey=2924220432'].join('');function a(){if(!window.open([f,p].join(''),'mb',['toolbar=0,status=0,resizable=1,width=620,height=450,left=',(s.width-620)/2,',top=',(s.height-450)/2].join('')))u.href=[f,p].join('');};if(/Firefox/.test(navigator.userAgent)){setTimeout(a,0)}else{a()}})(screen,document,encodeURIComponent));"></a></div><div class="twitter"><a class="fa fa-twitter" href="http://twitter.com/home?status=,http://dc-maggic.github.io/2020/07/13/字符串和正则表达式/,侦探事务所,字符串和正则表达式,;"></a></div></div><div class="pagination"><ul class="clearfix"><li class="next pagbuttons"><a class="btn" role="navigation" href="/2020/07/10/关于循环的优化/" title="关于循环的优化">下一篇</a></li></ul></div></div></div></div></div><script src="/js/jquery.js"></script><script src="/js/jquery-migrate-1.2.1.min.js"></script><script src="/js/jquery.appear.js"></script></body></html>
