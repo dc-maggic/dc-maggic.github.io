@@ -1,0 +1,66 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><meta name="author" content="黄侦探"><title>模仿做一个简单的 Vue · 侦探事务所</title><meta name="description" content="上周末，一直在研究怎么做一个简简单单的 Vue，名字叫 micro-Vue。
+基础Vue 的响应式原理是基于 Object.defineProperty() 这个API。
+构建源码中的 vue/src/core 文件是核心代码，Vue 实例在 vue/src/core/instance/index."><meta name="keywords"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="renderer" content="webkit"><link rel="short icon" href="/images/favicon.png" type="image/x-icon"><link rel="stylesheet" href="/css/style.css"><link rel="stylesheet" href="/css/blog_basic.css"><link rel="stylesheet" href="/css/font-awesome.min.css"><link rel="alternate" type="application/atom+xml" title="ATOM 1.0" href="/atom.xml"><script src="/js/baidutongji.js"></script></head><body><div class="sidebar animated fadeInDown"><div class="logo-title"><div class="title"><img src="/images/logo@2x.png" style="width:127px;"><h3 title=""><a href="/">侦探事务所</a></h3><div class="description"><p>学海无涯 寻真相</p></div></div></div><ul class="social-links"><li><a href="http://github.com/dc-maggic"><i class="fa fa-github"></i></a></li></ul><div class="footer"><div class="by_farbox"><span>Nice to meet you!</span></div></div></div><div class="main"><div class="page-top animated fadeInDown"><div class="nav"><li><a href="/">首页</a></li><li><a href="/about">关于</a></li><li><a href="/archives">归档</a></li><li><a href="/links">友链</a></li><li><a href="/albums">相册</a></li><li><a href="/books">书籍</a></li></div><div class="information"><div class="back_btn"><li><a class="fa fa-chevron-left" onclick="window.history.go(-1)"> </a></li></div><div class="avatar"><img src="/images/littlegirl.jpg"></div></div></div><div class="autopagerize_page_element"><div class="content"><div class="post-page"><div class="post animated fadeInDown"><div class="post-title"><h3><a>模仿做一个简单的 Vue</a></h3></div><div class="post-content"><p>上周末，一直在研究怎么做一个简简单单的 Vue，名字叫 <a href="https://github.com/dc-maggic/micro-vue" target="_blank" rel="noopener">micro-Vue</a>。</p>
+<h3 id="基础"><a href="#基础" class="headerlink" title="基础"></a>基础</h3><p>Vue 的响应式原理是基于 <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperty" target="_blank" rel="noopener">Object.defineProperty()</a> 这个API。</p>
+<h3 id="构建"><a href="#构建" class="headerlink" title="构建"></a>构建</h3><p><a href="https://github.com/vuejs/vue" target="_blank" rel="noopener">源码</a>中的 <a href="https://github.com/vuejs/vue/tree/dev/src/core" target="_blank" rel="noopener">vue/src/core</a> 文件是核心代码，Vue 实例在 <a href="https://github.com/vuejs/vue/tree/dev/src/instance" target="_blank" rel="noopener">vue/src/core/instance/index.js</a> 中初始化，然后再初始化它的生命周期、事件、渲染、beforeCreated 钩子函数、状态等。我们接着看初始化状态时，它会依次对 props、methods、data、computed、watch 进行数据绑定。<br>本次研究的是 data 部分的数据处理。</p>
+<ol>
+<li>Complier<br>PS：我还没有看完 virtual DOM，所以只能解析真实DOM<br>解析渲染时，会创建一个 Watcher 实例。</li>
+<li>Watcher<br> Watcher 是要和 Dep 打配合的。<ul>
+<li>Watcher 构造函数接受5个参数：<ul>
+<li>vm：Vue 对象；</li>
+<li>expOrFn：对数据对象的访问触发数据的 getter 方法的函数；</li>
+<li>cb：回调函数，就是数据更新时会发生的事情；</li>
+<li>options：deep、user、lazy、sync、before等，主要给 computed、watch 方法使用的；</li>
+<li>isRenderWatcher：（没看懂做啥子)</li>
+</ul>
+</li>
+<li>然后我的 Watcher 根据 Complier 的需要设置为4个参数：<ul>
+<li>vm：Vue对象</li>
+<li>data[key]</li>
+<li>cb：回调函数</li>
+<li>arg：回调函数的参数</li>
+</ul>
+</li>
+<li>源码的 Watcher 做了什么事？<ul>
+<li>constructor<br>  获取 options 的各种值，判断是否 lazy（个人盲猜是 Vue 中 computed 函数的专属 key）再决定是否给 value 赋值。<br>  然后 get()</li>
+<li>get<br>  先将 Dep.target 赋值为当前的 Watcher，然后通过 expOrFn 获取 value 值（这个是时时变化的）</li>
+<li>addDep<br>  添加新的依赖（Dep）</li>
+<li>cleanupDeps<br>  清除依赖</li>
+<li>update<br>  数据变化后，区分 computed、watch、还是 Node，再进行对应的数据响应。</li>
+<li>run<br>  在 update 之后，发现是同步的，开始干活了。</li>
+<li>evaluate</li>
+<li>depend<br>  判断依赖是否重复，给 Dep 实例的收集器添加新的 Watcher。</li>
+<li>teardown<br>后面这3个，没有仔细研究。</li>
+</ul>
+</li>
+<li>我的 Watcher 做了什么事？<ul>
+<li>get<br>  创造实例后，也是先将 Dep.target 赋值为当前的 Watcher，再去获取 data[key] 的值，此时会触发 getter 方法。</li>
+<li>update<br>  data[key] 重新赋值时会触发实例的 update 函数，进而触发回调函数，对 DOM 进行数据更新。<br>oh, so easy.我就是没有做清除的功能，以及 computed、watch 函数对应的判断。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Dep<br> 依赖收集<ul>
+<li>源码的 Dep 做了什么事？<ul>
+<li>constructor<br>  拥有 id、subs（依赖收集器）</li>
+<li>addSub<br>  添加监听器 Watcher，push 给收集器。</li>
+<li>removeSub<br>  删除监听器。</li>
+<li>depend<br>  调用 Watcher 的 addDep（这个会比较严格，判断是否重复再添加 Watcher。</li>
+<li>notify<br>  依赖响应时，如果是异步的需要给收集器重新排序。然后调用 Watcher 的 update 方法。</li>
+</ul>
+</li>
+<li>我的 Dep 呢？<ul>
+<li>addDep<br>  添加监听器 Watcher</li>
+<li>notify<br>  依赖响应时，调用 Watcher 的 update 方法。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Observer<br> 对 data 中每个数据创建自己的 Dep 实例，再 Object.defineProperty() 反应。<ul>
+<li>get<br>  先判断 Dep.target 是否有内容，有内容了代表它被监控了，将 Dep.target 的内容 push 给 Dep 实例的  subs。</li>
+<li>set<br>  数据变化时，判断 Dep 实例 的 subs 是否有东西，再依次响应。</li>
+</ul>
+</li>
+</ol>
+<p>我的项目是从 initData 开始，然后对 micro-Vue 的 data 每个数据都绑定 get、set方法。再接着解析文档中的 DOM，对需要响应的数据添加一个 Watcher，此时会触发数据中的 get 方法，从而添加了依赖，在下次数据发生变动时，set 会触发依赖的事件。<br>功能在我的 github 里有比较简略的介绍，Array 数据类型我也没有进行判断，稍后会再补充。</p>
+</div><div class="post-footer"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2020-12-23</span><i class="fa fa-tag"></i><a class="tag" href="/tags/Vue/" title="Vue">Vue </a></div></div></div></div><div class="share"><div class="evernote"><a class="fa fa-bookmark" href="javascript:(function(){EN_CLIP_HOST='http://www.evernote.com';try{var%20x=document.createElement('SCRIPT');x.type='text/javascript';x.src=EN_CLIP_HOST+'/public/bookmarkClipper.js?'+(new%20Date().getTime()/100000);document.getElementsByTagName('head')[0].appendChild(x);}catch(e){location.href=EN_CLIP_HOST+'/clip.action?url='+encodeURIComponent(location.href)+'&amp;title='+encodeURIComponent(document.title);}})();" ref="nofollow" target="_blank"></a></div><div class="weibo"><a class="fa fa-weibo" href="javascript:void((function(s,d,e){try{}catch(e){}var f='http://service.weibo.com/share/share.php?',u=d.location.href,p=['url=',e(u),'&amp;title=',e(d.title),'&amp;appkey=2924220432'].join('');function a(){if(!window.open([f,p].join(''),'mb',['toolbar=0,status=0,resizable=1,width=620,height=450,left=',(s.width-620)/2,',top=',(s.height-450)/2].join('')))u.href=[f,p].join('');};if(/Firefox/.test(navigator.userAgent)){setTimeout(a,0)}else{a()}})(screen,document,encodeURIComponent));"></a></div><div class="twitter"><a class="fa fa-twitter" href="http://twitter.com/home?status=,http://dc-maggic.github.io/2020/12/23/模仿做一个简单的-Vue/,侦探事务所,模仿做一个简单的 Vue,;"></a></div></div><div class="pagination"><ul class="clearfix"><li class="next pagbuttons"><a class="btn" role="navigation" href="/2020/11/24/为什么js的安全数是2-53-1/" title="为什么js的安全数是2^53-1">下一篇</a></li></ul></div></div></div></div></div><script src="/js/jquery.js"></script><script src="/js/jquery-migrate-1.2.1.min.js"></script><script src="/js/jquery.appear.js"></script></body></html>
